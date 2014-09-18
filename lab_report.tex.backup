@@ -1,8 +1,7 @@
 %Lab Report
 \documentclass[12pt,titlepage, a4paper]{article}
  \usepackage[german]{babel}
- \usepackage{graphicx}
- 
+
 \begin{document}
 
 \title{Report\\LAB Kognitive Robotik}
@@ -41,20 +40,11 @@ im Vordergrund stand.
 \section{Aufgabenstellung} 
 In dem ersten Track von Challenge 3 geht es vorrangig um die Verarbeitung von visuellen Informationen, um die Pose des MAV zu sch\"atzen und schließlich eine Karte von der Umgebung aufzubauen.
 
-
-
 \subsection{Task 1 - Visuelle Lokalisierung}
 Vision based localization
 Localize w.r.t. starting point
 Local accuracy/consistency
 Real-time computation!
-
-\begin{figure}
- \centering
- \includegraphics[width=\textwidth]{./Screens/t1_opt2_april.png}
- % t1_opt2_april.png: 1243x912 pixel, 96dpi, 32.88x24.13 cm, bb=0 0 932 684
-\end{figure}
-
 
 				
 \subsection{Task 2 - 3D-Rekonstruktion}

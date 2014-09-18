@@ -1,8 +1,7 @@
 %Lab Report
 \documentclass[12pt,titlepage, a4paper]{article}
  \usepackage[german]{babel}
- \usepackage{graphicx}
- 
+
 \begin{document}
 
 \title{Report\\LAB Kognitive Robotik}
