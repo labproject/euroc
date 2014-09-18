@@ -1,7 +1,9 @@
 %Lab Report
 \documentclass[12pt,titlepage, a4paper]{article}
  \usepackage[german]{babel}
-
+ \usepackage[utf8]{inputenc}
+ \usepackage{graphicx}
+ 
 \begin{document}
 
 \title{Report\\LAB Kognitive Robotik}
@@ -18,6 +20,7 @@
 
 
 \section{Einleitung}
+ää
 Im Rahmen der Projektgruppe Kognitive Robotik sollten in diesem Jahr die Aufgaben der European Robotics Challenges\footnote{http://www.euroc-project.eu/} bearbeitet werden. 
 Die Aufgaben der European Robotics Challenges unterteilen sich dabei in drei Challenges, die wiederum verschiedene Unteraufgaben haben:
 
@@ -28,7 +31,7 @@ Die Aufgaben der European Robotics Challenges unterteilen sich dabei in drei Cha
 \end{itemize}
 
 blabla mehr zu euroc? \\
-Autonome Flugroboter eignen sich aufgrund ihres flexiblen Aufbaus und der Möglichkeit schwer zug\"angliche Objekte anzufliegen, besonders f\"ur die Inspektion und Überwachung von sehr großen industriellen
+Autonome Flugroboter eignen sich aufgrund ihres flexiblen Aufbaus und der M\"oglichkeit schwer zug\"angliche Objekte anzufliegen, besonders f\"ur die Inspektion und Überwachung von sehr gro{\ss}en industriellen
 Anlagen oder Infrastrukturen. Dabei sollen sie autonom agieren, sodass auf die Abh\"angigkeit von einem Piloten verzichtet werden kann.
 Auch f\"ur die Inspektion von gef\"ahrlichen Umgebungen eignet sich ein autonomer Flugroboter.
 
@@ -38,15 +41,19 @@ im Vordergrund stand.
 
 
 \section{Aufgabenstellung} 
-In dem ersten Track von Challenge 3 geht es vorrangig um die Verarbeitung von visuellen Informationen, um die Pose des MAV zu sch\"atzen und schließlich eine Karte von der Umgebung aufzubauen.
+In dem ersten Track von Challenge 3 geht es vorrangig um die Verarbeitung von visuellen Informationen, um die Pose des MAV zu sch\"atzen und schlie{\ss}lich eine Karte von der Umgebung aufzubauen.
 
 
 
 \subsection{Task 1 - Visuelle Lokalisierung}
-Vision based localization
-Localize w.r.t. starting point
-Local accuracy/consistency
-Real-time computation!
+In der ersten Aufgabe ging es darum aus Stereobildern eine 6D-Pose zu sch\"atzen. Dazu wurden realistische Datens\"tze mit unterschiedlichen Schwierigkeiten zur Verf\"ugung gestellt.
+Ausschlie{\ss}lich anhand von diesen Datens\"atzen sollte nun die Lokalisierung erfolgen. F\"ur die Evaluation war sowohl die lokale Genauigkeit als auch die Echtzeitf\"ahigkeit der Berechnung entscheidend.
+Eine \"Ubersicht der Evaluierungskriterien und Punktevergabe findet sich in \cite{blaURL}.
+
+Vision based localization\\
+Localize w.r.t. starting point\\
+Local accuracy/consistency\\
+Real-time computation!\\
 
 \begin{figure}
  \centering
