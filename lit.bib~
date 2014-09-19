@@ -1,0 +1,33 @@
+@InProceedings{EPFL-CONF-199740,
+   affiliation = {OTHER},
+   author      = {Forster, Christian and Pizzoli, Matia and Scaramuzza, Davide},
+   booktitle   = {2014 {IEEE} {I}nternational {C}onference on {R}obotics
+                 and {A}utomation ({ICRA} 2014)},
+   details     = {http://infoscience.epfl.ch/record/199740},
+   documenturl = {http://infoscience.epfl.ch/record/199740/files/ICRA14_Forster.pdf},
+   location    = {Hong Kong, China},
+   oai-id      = {oai:infoscience.epfl.ch:199740},
+   oai-set     = {conf},
+   review      = {REVIEWED},
+   status      = {PUBLISHED},
+   submitter   = {221818},
+   title       = {{SVO}: {F}ast {S}emi-{D}irect {M}onocular {V}isual {O}dometry},
+   unit        = {NCCR-ROBOTICS},
+   year        = 2014
+}
+
+@INPROCEEDINGS{Geiger11,
+ author = {Andreas Geiger and Julius Ziegler and Christoph Stiller},
+ title = {StereoScan: Dense 3d Reconstruction in Real-time},
+ booktitle = {IEEE Intelligent Vehicles Symposium},
+ year = {2011},
+ month = {June},
+ address = {Baden-Baden, Germany}
+}
+
+@Manual{eurocannex,
+  title =	{Scoring System for Stage I},
+  author =	 {EuRoC},
+  organization = {EuRoC},
+  year =	 {2014}
+}

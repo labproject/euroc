@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.1.22)  18 SEP 2014 19:57
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2014.1.22)  19 SEP 2014 09:58
 entering extended mode
  %&-line parsing enabled.
 **lab_report.tex
@@ -340,46 +340,51 @@ tzen und schlie^^Ylich
  []
 
 
-LaTeX Warning: Citation `blaURL' on page 1 undefined on input line 51.
-
-
-Overfull \hbox (28.74844pt too wide) in paragraph at lines 49--52
+Overfull \hbox (28.74844pt too wide) in paragraph at lines 49--60
 \OT1/cmr/m/n/12 sch[]atzen. Dazu wur-den re-al-is-tis-che Datens[]atze mit un-t
 er-schiedlichen Schwierigkeit-
  []
 
-[1]
-Underfull \hbox (badness 10000) in paragraph at lines 53--57
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--60
 
  []
 
-<./Screens/t1_opt2_april.png, id=16, 929.72343pt x 684.30656pt>
+[1]
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
+
+ []
+
+<./Screens/t1_opt2_april.png, id=16, 862.72313pt x 636.87938pt>
 File: ./Screens/t1_opt2_april.png Graphic file (type png)
 
-<use ./Screens/t1_opt2_april.png> [2 <./Screens/t1_opt2_april.png (PNG copy)>]
-[3] (./lab_report.aux)
+<use ./Screens/t1_opt2_april.png> [2]
+<./Screens/t3_checkerboard.png, id=21, 935.74594pt x 679.03688pt>
+File: ./Screens/t3_checkerboard.png Graphic file (type png)
 
-LaTeX Warning: There were undefined references.
-
- ) 
+<use ./Screens/t3_checkerboard.png> (./lab_report.bbl [3 <./Screens/t1_opt2_apr
+il.png (PNG copy)>] [4 <./Screens/t3_checkerboard.png (PNG copy)>]) [5]
+(./lab_report.aux) ) 
 Here is how much of TeX's memory you used:
- 1516 strings out of 495061
- 18100 string characters out of 1182621
- 72704 words of memory out of 3000000
- 4710 multiletter control sequences out of 15000+50000
- 9109 words of font info for 32 fonts, out of 3000000 for 9000
+ 1530 strings out of 495061
+ 18366 string characters out of 1182621
+ 73744 words of memory out of 3000000
+ 4719 multiletter control sequences out of 15000+50000
+ 9149 words of font info for 32 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  25i,8n,24p,231b,226s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texlive/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/publi
-c/amsfonts/cm/cmr17.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/c
-m/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></
-usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on lab_report.pdf (4 pages, 242910 bytes).
+</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cm
+bx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/
+texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-texliv
+e/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type
+1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
+fonts/cm/cmr7.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8
+.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on lab_report.pdf (6 pages, 397929 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
+ 63 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
