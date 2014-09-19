@@ -87,19 +87,26 @@ Wie in Abbildung~\ref{fig:evat3} zu sehen, driften wir vor allem in x- und y-Ric
 
 
 				
-\subsection{Task 2 - 3D-Rekonstruktion}
+\subsection{Task 2 - Mapping}
+In der zweiten Teilaufgabe, der dritten Challenge, sollte eine 3D-Karte mit Hilfe des Octomap-Frameworks von Hornung et al. aus Stereobildpaaren und einer jeweils zugehörigen 6D-Pose erstellt werden. Die generierte Karte konnte online überprüft werden. Bewertet wurde anhand des Matthew-Correlation-Coefficient und der Laufzeit. Der Matthew-Correlation-Coefficient nutz das Verhätnis zwischen den als false-free, false-occupied, true-free und true-occupied klassifizierten Voxeln.
 
-Reconstruct environment in order to create a 3-D occupancy grid
-Camera poses are given
-create occupancy grid from depth images
-Real-time computation, but over the whole dataset
+Um dieses Problem zu lösen haben wir uns für das elas-Framework von Geiger entschieden um dichte Punktwolken zu generieren.
 
+Die Installation von elas erwies sich aufwendiger als angenommen, da es ROS-Hydro und catkin noch nicht direkt unterstützt. Damit elas unsere Stereobilder gut verarbeiten konnte, mussten diese zunächst noch rektifiziert werden. Mit Hilfe von OpenCV und der gegebenen Kamerakalibrierung die wir schon im ersten Teil in ein OpenCV-konformes Format umgewandelt hatten, war dieser Schritt schnell getan. Was noch fehlte war eine Spezifizierung der Transformationskette vom map-Frame in den Kamera-Frame. Nach Betrachtung der Posen-Nachricht die wir vom Server geliefert bekamen, wussten wir, dass die Pose im IMU-Frame war. Zusätzlich zu den rektifizierten Bildern und der Pose musste nun also auch noch ein Transformation von map auf IMU verfügbar gemacht werden. Die statische Transformation von der IMU zu der Kamera war auch schon aus dem ersten Teil bekannt. Da nun alle Anforderungen der beiden benutzen Frameworks erfüllt waren, konnte die erste Karte erstellt werden. Diese sah auch schon ganz gut aus und stimmte größtenteils mit der von uns handgezeichneten Karte überein. Leider gab es nur wenig Punkte für die Karte. Zwei Punkte für die Akkuratesse und nur Null für die Laufzeit. Um die Laufzeit zu verbessern, beschlossen wir einige Frames zu überspringen. Zunächst war es aber wichtiger die Genauigkeit der Karte zu steigern. Die generierte Voxel-Karte hatte relativ dicke Wände und wir waren uns unsicher inwiefern dies mit in die Bewertung aufgenommen wurde. Als erstes sollten die Wände also dünner werden. Bei Betrachtung der Punktwolke fiel auf, dass an den Rändern dieser keilförmige Falschmessungen in den umliegenden Raum gingen. Um dieses Problem anzugehen bestand ein erster Lösungsansatz einen Filter zu implementieren der auf dem Disparitätsbild ein einem Box-Kernel nach den Minimum und dem Maximum zu suchen und falls die Differenz der beiden über einem Schwellwert lag, den ganzen betrachteten Ausschnitt zu verwerfen. Im Falle von elas auf -10 zu setzen. Leider führte dies nicht zur Eleminierung der Falschmessungen. Siehe Abbildung 2.
+\begin{figure}[ht]
+ \includegraphics[width=0.5\textwidth]{./jumpEdge/lab_report_je_off.png}
+ \includegraphics[width=0.5\textwidth]{./jumpEdge/lab_report_je_on_17.png}
+ \caption{Min-Max-Filter}
+ \label{Figure 2}
+\end{figure}
+Eine weitere Idee um die Wände auszudünnen und Falschmessungen zu eliminieren, war die generierte Octomap zu prunen nachdem der Occcupancy-Threshold erhöht wurde. Dies führte dann auch zu einer sichtabaren Veränderung in der Map. Die Wände wurden etwas dünner und occupied-Space wurde an manchen Stellen zu unkown- oder free-Space. Auf die finale Bewertung der Map hatte dies jedoch nur minimale Auswirkungen. Auch Parameteranpassungen in elas vorallem die Gap-Interpolation hatten wenig sichtbare Auswirkungen auf das Resultat. Die Gap-Interpolation führte dazu, dass es im Disparitätsbild sehr harte Übergänge in den interpolierten Bereichen auftraten. Um dies zu verhindern filterten wir das Original-Disparitätsbild mit einem Gauss-Filter um glatte Ränder um die Lücken zu bekommen. Dannach interpolierten wir und kopierten die so weich interpolierten Lücken zurück in das Original-Disparitätsbild, um die interessanten Feautures zu behalten aber keine komischen Effekte durch die Gap-Interpolation zu bekommen. Dieser Filter führte nur zu einer minimalen Verbesserung und wurde deswegen wieder verworfen.
 
+Um nun voran zu kommen entschlossen wir uns eine e-mail an den Support zu schreiben um nachzufragen wo genau unser Problem lag.
+Zwischenzeitlich hatten wir auch die Vermutung, dass unsere generierte Karte im falschen Koordinatensystem lag und es deshalb zu der mittelmäßigen Bewertung kam.
+Wie sich dann durch die e-mail herausstellte waren jedoch weder die dicken Wände noch das Koordinatensystem unser Hauptproblem. Das Bewertungssystem wertete auch unkown-Space der free sein sollte also false-occupied. Unser Problem war, dass wir zu viel unknown-Space in der Nähe der Decke und den Wände hatten. Siehe Abbildung 3.1.
+Nun musste also der Freespace immer dann expandiert werden, wenn ein als free klassifizierter Voxel einen Nachbarn hatte, der als unknown klassifiziert war. Aufgrund der Speicherung der Karte in einem Octree sind Voxel die unknown sind nicht explizit in der Datenstruktur gespeichert. Die Expansion des Free-Space führte schließlich auch zu einer deutlichen Verbesserung in der Bewertung. Durch verschiedene Testläufe fanden wir heraus, dass die 4-malige Expansion des Free-Space zu dem besten Ergebnis führten. Es sind jedoch nach wie vor einige fals-occupied übrig und als nächster Schritt wäre es möglich occupied Voxel die weniger als 4 Nachbarn haben die occupied sind auf free zu setzen.
 
 \section{Experimente}
-
-
-
 
 \section{Zusammenfassung}
 
