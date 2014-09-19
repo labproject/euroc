@@ -1,0 +1,118 @@
+//default params: 105 ms & 1.8% => 5 Pts
+	<param name="max_features" type"int" value="2" />	
+	<param name="bucket_width" type="double" value="50.0" />
+	<param name="bucket_height" type="double" value="50.0" />
+	<param name="nms_n" type"int" value="3" />
+	<param name="nms_tau" type"int" value="50" />
+	<param name="match_binsize" type"int" value="50" />
+	<param name="match_radius" type="int" value="200" />
+	<param name="match_disp_tolerance" type="int" value="2" />
+	<param name="outlier_disp_tolerance" type="int" value="5" />
+	<param name="outlier_flow_tolerance" type="int" value="5" />
+	<param name="multi_stage" type="int" value="1" />
+	<param name="half_resolution" type="int" value="1" />
+	<param name="refinement" type="int" value="1" />
+	<param name="queue_size" type="int" value="5" />
+	<param name="approximate_sync" type="bool" value="False" />
+	<param name="ransac_iters" type="int" value="200" />
+	<param name="inlier_threshold" type="double" value="1.5" />
+	<param name="reweighting" type="bool" value="True" />
+	<param name="ref_frame_change_method" type="int" value="0" />
+	<param name="ref_frame_motion_threshold" type="double" value="5" />
+	<param name="ref_frame_inlier_threshold" type="int" value="150" /> 
+	
+//91 ms & 2.1% => 5 Pts
+	<param name="max_features" type"int" value="2" />	
+	<param name="bucket_width" type="double" value="50.0" />
+	<param name="bucket_height" type="double" value="50.0" />
+	<param name="nms_n" type"int" value="3" />
+	<param name="nms_tau" type"int" value="50" />
+	<param name="match_binsize" type"int" value="50" />
+	<param name="match_radius" type="int" value="100" />
+	<param name="match_disp_tolerance" type="int" value="2" />
+	<param name="outlier_disp_tolerance" type="int" value="5" />
+	<param name="outlier_flow_tolerance" type="int" value="5" />
+	<param name="multi_stage" type="int" value="1" />
+	<param name="half_resolution" type="int" value="1" />
+	<param name="refinement" type="int" value="1" />
+	<param name="queue_size" type="int" value="5" />
+	<param name="approximate_sync" type="bool" value="False" />
+	<param name="ransac_iters" type="int" value="150" />
+	<param name="inlier_threshold" type="double" value="1.5" />
+	<param name="reweighting" type="bool" value="True" />
+	<param name="ref_frame_change_method" type="int" value="0" />
+	<param name="ref_frame_motion_threshold" type="double" value="5" />
+	<param name="ref_frame_inlier_threshold" type="int" value="150" /> 
+	
+//98 ms & 1.6% => 6 Pts
+	
+	<param name="max_features" type="int" value="2" />
+	<param name="bucket_width" type="double" value="50.0" />
+	<param name="bucket_height" type="double" value="50.0" />
+	<param name="nms_n" type="int" value="3" />
+	<param name="nms_tau" type="int" value="50" />
+	<param name="match_binsize" type="int" value="50" />
+	<param name="match_radius" type="int" value="200" />
+	<param name="match_disp_tolerance" type="int" value="2" />
+	<param name="outlier_disp_tolerance" type="int" value="5" />
+	<param name="outlier_flow_tolerance" type="int" value="5" />
+	<param name="multi_stage" type="int" value="1" />
+	<param name="half_resolution" type="int" value="1" />
+	<param name="refinement" type="int" value="1" />
+	<param name="queue_size" type="int" value="5" />
+	<param name="approximate_sync" type="bool" value="False" />
+	<param name="ransac_iters" type="int" value="175" />
+	<param name="inlier_threshold" type="double" value="1.5" />
+	<param name="reweighting" type="bool" value="True" />
+	<param name="ref_frame_change_method" type="int" value="0" />
+	<param name="ref_frame_motion_threshold" type="double" value="5" />
+	<param name="ref_frame_inlier_threshold" type="int" value="150" />
+	
+//96ms & 1.5% 0> 6 Pts   //with compile flags: 39 ms!!!-> 7Pts
+
+	<param name="max_features" type="int" value="2" />
+	<param name="bucket_width" type="double" value="50.0" />
+	<param name="bucket_height" type="double" value="50.0" />
+	<param name="nms_n" type="int" value="3" />
+	<param name="nms_tau" type="int" value="50" />
+	<param name="match_binsize" type="int" value="50" />
+	<param name="match_radius" type="int" value="200" />
+	<param name="match_disp_tolerance" type="int" value="2" />
+	<param name="outlier_disp_tolerance" type="int" value="5" />
+	<param name="outlier_flow_tolerance" type="int" value="5" />
+	<param name="multi_stage" type="int" value="1" />
+	<param name="half_resolution" type="int" value="1" />
+	<param name="refinement" type="int" value="1" />
+	<param name="queue_size" type="int" value="5" />
+	<param name="approximate_sync" type="bool" value="False" />
+	<param name="ransac_iters" type="int" value="165" />
+	<param name="inlier_threshold" type="double" value="1.5" />
+	<param name="reweighting" type="bool" value="True" />
+	<param name="ref_frame_change_method" type="int" value="0" />
+	<param name="ref_frame_motion_threshold" type="double" value="5" />
+	<param name="ref_frame_inlier_threshold" type="int" value="150" />
+	
+	
+	
+	<param name="max_features" type="int" value="2" />
+	<param name="bucket_width" type="double" value="50.0" />
+	<param name="bucket_height" type="double" value="50.0" />
+	<param name="nms_n" type="int" value="3" />
+	<param name="nms_tau" type="int" value="50" />
+	<param name="match_binsize" type="int" value="50" />
+	<param name="match_radius" type="int" value="200" />
+	<param name="match_disp_tolerance" type="int" value="2" />
+	<param name="outlier_disp_tolerance" type="int" value="5" />
+	<param name="outlier_flow_tolerance" type="int" value="5" />
+	<param name="multi_stage" type="int" value="1" />
+	<param name="half_resolution" type="int" value="1" />
+	<param name="refinement" type="int" value="1" />
+	<param name="queue_size" type="int" value="5" />
+	<param name="approximate_sync" type="bool" value="False" />
+	<param name="ransac_iters" type="int" value="160" />
+	<param name="inlier_threshold" type="double" value="1.5" />
+	<param name="reweighting" type="bool" value="True" />
+	<param name="ref_frame_change_method" type="int" value="1" />
+	<param name="ref_frame_motion_threshold" type="double" value="5" />
+	<param name="ref_frame_inlier_threshold" type="int" value="150" />
+	
