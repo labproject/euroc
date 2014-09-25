@@ -28,9 +28,8 @@
 \section{Einleitung}
 
 Im Rahmen der Projektgruppe Kognitive Robotik sollten in diesem Jahr die Aufgaben der European Robotics Challenges\footnote{http://www.euroc-project.eu/} bearbeitet werden.
-Ziel dieser Challenge ist es, die Entwicklung von Lösungen für noch ungelöste Probleme in der Robotik anzutreiben.
-In Form eines Wettbewerbs soll das Bewusstsein auf die Notwendigkeit der Entwicklung von Algorithmen für diese Probleme gelenkt, und Teams aus dem 
-akademischen und industriellen Bereich ermuntert werden, sich zu beteiligen.
+Ziel dieser \textit{Challenge} ist es, die Entwicklung von Verfahren für noch ungelöste Probleme in der Robotik voranzutreiben.
+In Form eines Wettbewerbs soll das Bewusstsein auf die Notwendigkeit der Entwicklung von Algorithmen für diese Probleme gelenkt und Teams aus dem akademischen und industriellen Bereich ermuntert werden, sich zu beteiligen.
 Die Aufgaben der European Robotics Challenges unterteilen sich dabei in drei Challenges, die wiederum verschiedene Unteraufgaben haben:
 
 \begin{itemize}
@@ -39,7 +38,7 @@ Die Aufgaben der European Robotics Challenges unterteilen sich dabei in drei Cha
  \item Challenge 3: Flugroboter für industrielle Inspektion \mbox{(Track 1 \& 2)}
 \end{itemize}
 
-Unsere Gruppe befasste sich mit dem ersten Track der dritten Challenge, bei welchem die Lokalisierung eines Flugroboters (\textit{engl. Micro Aerial Vehicle, MAV}) und die 3D-Rekonstruktion 
+Unsere Gruppe befasste sich mit dem ersten \textit{Track} der dritten Challenge, bei welchem die Lokalisierung eines Flugroboters (\textit{engl. Micro Aerial Vehicle, MAV}) und die 3D-Rekonstruktion 
 der Umgebung im Vordergrund stand.
 Für die Umgebungserkennung ist der in der Challenge eingesetzte Flugroboter mit einem Inertialsensor (\textit{engl. inertial measurement unit, IMU}) in Verbindung mit einem Stereokamerasystem ausgestattet. 
 
@@ -57,17 +56,14 @@ Im folgenden werden die Aufgaben und entsprechenden Lösungsansätze von Track 1
 Der erste Track von Challenge 3 befasst sich vorrangig mit der Verarbeitung von visuellen Informationen und Geschwindigkeiten, welche die IMU liefert, um die Pose des MAV zu schätzen
 und schließlich eine Karte von der Umgebung aufzubauen. Beide Aufgaben, Lokalisierung und Kartierung, lassen sich unabhängig voneinander lösen.
 
-
-
 \subsection{Task 1 - Visuelle Lokalisierung}
 In der ersten Aufgabe ging es darum aus Stereobildern eine 6D-Pose zu schätzen. Dazu wurden realistische Datensätze mit unterschiedlichen Schwierigkeiten zur Verfügung gestellt.
-Ausschließlich anhand dieser Datensätze sollte nun die Lokalisierung erfolgen. Für die Evaluation war sowohl die lokale Genauigkeit als auch die Echtzeitfähigkeit der Berechnung entscheidend.
+Ausschließlich anhand dieser Datensätze sollte nun die Lokalisierung erfolgen. Für die Evaluation war, sowohl die lokale Genauigkeit als auch die Echtzeitfähigkeit der Berechnung, entscheidend.
 Eine Übersicht der Evaluierungskriterien und Punkteverteilung findet sich im bereitgestellten technischem Annex\cite{eurocannex}.
 Neben den Kamerabildern wurden zudem eine Kalibrierung des Stereokamerasystems und der IMU zur Verfügung gestellt. 
 Für die Berechnung der visuellen Odometrie wurden zunächst zwei bereits in ROS verfügbare Verfahren installiert und getestet:\\
 Das Paket Semi-direct Monocular Visual Odometry (SVO)\cite{EPFL-CONF-199740} und das Paket \mbox{LIBVISO2}-Paket \cite{Geiger11}.
-In ersten Experimenten stellte sich das \mbox{LIBVISO2} für unsere Zwecke als besser geeignet heraus, und zudem erlaubt es die Verwendung von Stereokameras für die visuelle Odometrie, 
-im Gegensatz zu SVO, welches ein monokulares Verfahren ist.
+In ersten Experimenten stellte sich das \mbox{LIBVISO2} für unsere Zwecke als besser geeignet heraus. Ein Vorteil von LIBVISO2 ist die Verwendung von Stereokameras für die visuelle Odometrie, wohingegen SVO ein monokulares Verfahren ist.
 Als Kamerakalibrierung wurde die bereitgestellte Kalibrierung mittels Aprilboard verwendet. Da diese jedoch nicht in dem von \mbox{LIBVISO2} verwendeten OpenCV-Format war, wandelten wir es mit Hilfe von OpenCV
 in ein konformes Format um.
 Für die korrekte Darstellung der Pose in IMU-Koordinaten, rechneten wir die aus den Stereobildern gewonnene Pose, mittels einer statischen Transformation aus der Kalibrierung, von Kamerakoordinaten 
@@ -100,12 +96,12 @@ Davon 3 Punkte in der Genauigkeit mit einem mittleren relativen Translationsfehl
 Die Laufzeit konnten wir mit dem Setzen des Compiler-Flags \textit{DCMAKE\_BUILD\_TYPE} auf \textit{Release} auf 39ms reduzieren, und erhielten so 3 Punkte in der Laufzeit.
 Für die Erhöhung der Genauigkeit passten wir die Parameter von \mbox{LIBVISO2} an die unterschiedlichen Schwierigkeiten an. 
 So erhöhten wir den Parameter match\_radius von 100 auf 200 und die RANSAC-Iterationen von 150 auf 160.
-Damit konnten wir den Fehler von 2.6\% auf 1.0\% reduzieren, und erhalten damit volle Punktzahl in der Genauigkeit.
+Damit konnten wir den Fehler von 2.6\% auf 1.0\% reduzieren, und erhieten damit volle Punktzahl in der Genauigkeit.
 Ein Beispiel einer solchen Evaluation ist in Abbildung~\ref{fig:evat1} zu sehen. Dort schneiden wir in der Genauigkeit sehr gut ab, mit einem gemittelten relativen Translationsfehler 
-von 1\% erhalten wir für die Genauigkeit volle Punktzahl. Auch in der Laufzeit sind wir mit 40ms verhältnismäßig gut. Für die volle Punktzahl benötigt man eine Laufzeit kleiner 20ms.
-Auch in der zweiten Schwierigkeitsstufe erhalten wir mit 8 von 10 möglichen Punkten ein gutes Ergebnis für die berechnete Odometrie. In der schwierigsten Stufe hat die visuelle Odometrie
-jedoch einige Probleme die korrekte Pose zu schätzen, was durch die schlechteren Belichtungsverhältnisse und merkmalsärmere Umgebung zu erlären ist.
-Wie in Abbildung~\ref{fig:evat3} zu sehen, driften wir vor allem in x- und y-Richtung stark.
+von 1\% erhielten wir für die Genauigkeit volle Punktzahl. Auch in der Laufzeit waren wir mit 40ms verhältnismäßig gut. Für die volle Punktzahl benötigt man eine Laufzeit kleiner 20ms.
+Auch in der zweiten Schwierigkeitsstufe erhielten wir mit 8 von 10 möglichen Punkten ein gutes Ergebnis für die berechnete Odometrie. In der schwierigsten Stufe hatte die visuelle Odometrie
+jedoch einige Probleme die korrekte Pose zu schätzen, was durch die schlechteren Belichtungsverhältnisse und merkmalsärmere Umgebung zu erlären war.
+Wie in Abbildung~\ref{fig:evat3} zu sehen, drifteten wir vor allem in x- und y-Richtung stark.
 
 
 \begin{table}
@@ -135,11 +131,11 @@ Task & Bewertungsintervall & Punkte\\
 \FloatBarrier
 			
 \subsection{Task 2 - Kartierung}
-In der zweiten Teilaufgabe, der dritten Challenge, sollte eine 3D-Karte mit Hilfe des octomap-Frameworks von Hornung \cite{hornung13auro} aus Stereobildpaaren und einer jeweils zugehörigen 6D-Pose erstellt werden. Die generierte Karte konnte online überprüft werden. Bewertet wurde anhand des Matthew-Correlation-Coefficient und der Laufzeit (Siehe Tabelle 2). Der Matthew-Correlation-Coefficient nutz das Verhätnis zwischen den als falsch-frei, falsch-belegt, echt-frei und echt-belegt klassifizierten Voxeln.\\
-$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$\\
-Wir wollten dem octomap-Framework dichte Punktwolken als Eingabe übergeben, deshlab entschieden wir uns für LIBELAS von Geiger \cite{Geiger2010ACCV}. Die Installation von LIBELAS erwies sich aufwendiger als angenommen, da es ROS-Hydro und catkin noch nicht direkt unterstützt. Damit LIBELAS unsere Stereobilder gut verarbeiten konnte, mussten diese zunächst noch rektifiziert werden. Mit Hilfe von OpenCV und der gegebenen Kameakalibrierung, die wir schon im ersten Teil in ein OpenCV-konformes Format umgewandelt hatten, war dieser Schritt schnell getan. Was noch fehlte war eine Spezifizierung der Transformationskette vom map-Koordinatensystem in das Kamera-Koordinatensystem. Die Betrachtung der Posen-Nachricht, die der Server bereitstellte, führte zu dem Schluss, dass die Pose im IMU-Koordinaten war. Zusätzlich zu den rektifizierten Bildern und der Pose musste nun also auch noch ein Transformation vom map-Koordinatensystem in das IMU-Koordiantensystem verfügbar gemacht werden. Die statische Transformation von dem IMU-System in das Kamera-System war schon aus der ersten Teilaufgabe von Track 1 bekannt. Da nun alle Anforderungen der beiden benutzen Frameworks erfüllt waren, konnte die erste Karte erstellt werden. Diese sah auch schon recht gut aus und stimmte größtenteils mit der von uns handgezeichneten Karte überein. Leider gab es nur wenig Punkte für die Karte. Zwei Punkte für die Akkuratesse und Null für die Laufzeit. Durch das Überspringen einiger Bilder, konnte die Laufzeit einfach reduziert werden. Das Problem bei der Akkuratesse war, das wir viele falsch-belegte Zellen hatten (ca. 27000). Dies führte zu einem Ungleichgewicht im Korrelations-Koeffizienten. 
+In der zweiten Teilaufgabe der dritten Challenge sollte eine 3D-Karte mit Hilfe des octomap-Frameworks von Hornung et al. \cite{hornung13auro} aus Stereobildpaaren und einer jeweils zugehörigen 6D-Pose erstellt werden. Die generierte Karte konnte online überprüft werden (siehe Abbildung 5). Bewertet wurde anhand des \textit{Matthews-Correlation-Coefficient} und der Laufzeit (siehe Tabelle 2). Der Korrelations-Koeffizient nutz das Verhältnis zwischen den als falsch-frei, falsch-belegt, echt-frei und echt-belegt klassifizierten Voxeln.\\\\
+$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$\\\\
+Wir wollten dem octomap-Framework dichte Punktwolken als Eingabe übergeben, deshalb entschieden wir uns für LIBELAS von Geiger et al. \cite{Geiger2010ACCV}. Die Installation von LIBELAS erwies sich aufwendiger als angenommen, da es ROS-Hydro und catkin noch nicht direkt unterstützte. Damit LIBELAS unsere Stereobilder gut verarbeiten konnte, mussten diese zunächst noch rektifiziert werden. Mit Hilfe von OpenCV und der gegebenen Kamerakalibrierung, die wir schon im ersten Teil in ein OpenCV-konformes Format umgewandelt hatten, war dieser Schritt schnell getan. Was noch fehlte war eine Spezifizierung der Transformationskette vom Welt-Koordinatensystem in das Kamera-Koordinatensystem. Die Betrachtung der Posen-Nachricht, die der Server bereitstellte, führte zu dem Schluss, dass die Pose den Ursprung des IMU-Koordinatensystems darstellte. Zusätzlich zu den rektifizierten Bildern und der Pose musste also auch eine Transformation vom Welt-Koordinatensystem in das IMU-Koordiantensystem verfügbar gemacht werden. Die statische Transformation von dem IMU-System in das Kamera-System war schon aus der ersten Teilaufgabe von Track 1 bekannt. Da nun alle Anforderungen der beiden benutzen Frameworks erfüllt waren, konnte die erste Karte erstellt werden. Diese stimmte auch größtenteils mit der von uns handgezeichneten Karte überein. Leider gab es nur wenig Punkte für die Karte. Zwei Punkte für die Akkuratesse und Null für die Laufzeit. Durch das Überspringen einiger Bilder, konnte die Laufzeit einfach reduziert werden. Das Problem bei der Akkuratesse war, dass wir viele falsch-belegte Zellen hatten (ca. 27000). Dies führte zu einem Ungleichgewicht im Korrelations-Koeffizienten. 
 
-Zunächst war es jedoch wichtiger, die Genauigkeit der Karte zu verbessern. Die generierte Voxel-Karte hatte relativ dicke Wände und wir waren uns unsicher, inwiefern dies mit in die Bewertung genommen wurde. Als erstes sollten die Wände dünner werden. Bei Betrachtung der Punktwolke fiel auf, dass an den Rändern keilförmige Falschmessungen in den umliegenden Raum ragten. Ein erster Lösungsansatz bestand darin, einen Filter zu implementieren, der über das Disparitätsbild mit einem Box-Kernel lief und, im jeweils betrachten Ausschnitt, nach dem Minimum und dem Maximum suchte. Falls die Differenz der Beiden über einem anpassbaren Schwellwert lag, wurde der Ausschnitt verwofen. Im Falle von LIBELAS beduete dies, den Ausschnitt auf -10 zu setzen. Leider führte dieses Vorgehen nicht zur Eleminierung der Falschmessungen (siehe Abbildung 2).
+Zunächst war es jedoch wichtiger die Genauigkeit der Karte zu verbessern. Die generierte Voxel-Karte hatte relativ dicke Wände und wir waren uns unsicher, inwiefern dies mit in die Bewertung genommen wurde. Als erstes sollten die Wände dünner werden. Bei Betrachtung der Punktwolke fiel auf, dass an den Rändern keilförmige Falschmessungen in den umliegenden Raum ragten. Ein erster Lösungsansatz bestand darin, einen Filter zu implementieren, der über das Disparitätsbild mit einem Box-Kernel iterierte und der im jeweils betrachten Ausschnitt nach dem Minimum und dem Maximum suchte. Falls die Differenz der Beiden über einem anpassbaren Schwellwert lag, wurde der Ausschnitt verworfen. Im Falle von LIBELAS bedeuete dies, die Pixelwerte des Ausschnitts auf -10 zu setzen. Leider führte dieses Vorgehen nicht zur Eleminierung der Falschmessungen (siehe Abbildung 2).
 
 \begin{figure}[h!]
 	\centering
@@ -166,9 +162,9 @@ Zunächst war es jedoch wichtiger, die Genauigkeit der Karte zu verbessern. Die 
  \caption{Pipeline}
 \end{figure}
 
-Eine weitere Idee, um die Wände zu verdünnen und Falschmessungen zu eliminieren, war die generierte Karte auszudünnen (Pruning), nachdem der Schwellwert für die Belegung (occcupancy-threshold) erhöht wurde. Dies führte dann auch zu einer sichtbaren Veränderung in der Karte. Die Wände wurden etwas dünner und einige, ehemals als belegt klassifizierte, Voxel wurden zu unbekannt oder frei. Auf die finale Bewertung der Karte, hatte das aber nur minimale Auswirkungen. Auch Parameteranpassungen in LIBELAS, vorallem des Parameters, der die Interplation über die Lücken im Disparitätsbild bestimmte, hatten wenig sichtbare Auswirkungen auf das Resultat. Die Interpolation führte dazu, dass im Disparitätsbild sehr harte Übergänge in den interpolierten Bereichen auftraten. Um dies zu verhindern filterten wir das Original-Disparitätsbild mit einem Gauss-Filter, um glatte Ränder rundum die Lücken zu bekommen. Dannach ließen wir LIEBELAS interpolieren und kopierten, die weich interpolierten Lücken zurück in das Original-Disparitätsbild. So blieben die interessanten Merkmale erhalten und es wurden keine harten Übergänge durch die Interpolation erzeugt. Dieses Vorgehen funktionierte aber nicht so ohne Weiteres, da der Gauss-Filter von OpenCV den, von LIBELAS als nicht klassifizierten, Bereich mit in die Berechnung einbezog. Deshalb wurde die Idee wieder verworfen. Wir beschlossen ganz auf die Interpolation über die Lücken zu verzichten.
+Eine weitere Idee, um die Wände zu verdünnen und Falschmessungen zu eliminieren, war die generierte Karte auszudünnen (pruning), nachdem der Schwellwert für die Belegung (occcupancy-threshold) erhöht wurde. Dies führte dann auch zu einer sichtbaren Veränderung in der Karte. Die Wände wurden etwas dünner und einige, ehemals als belegt klassifizierte, Voxel wurden zu unbekannt oder frei. Auf die finale Bewertung der Karte, hatte das aber nur minimale Auswirkungen. Auch Parameteranpassungen in LIBELAS, vor allem des Parameters, der die Interpolation über die Lücken im Disparitätsbild bestimmte, hatten wenig sichtbare Auswirkungen auf das Resultat. Die Interpolation führte dazu, dass im Disparitätsbild sehr harte Übergänge in den interpolierten Bereichen auftraten. Um dies zu verhindern filterten wir das Original-Disparitätsbild mit einem Gauss-Filter, um glatte Ränder rundum die Lücken zu bekommen. Danach ließen wir LIBELAS interpolieren und kopierten, die weich interpolierten Lücken zurück in das Original-Disparitätsbild. So blieben die interessanten Merkmale erhalten und es wurden keine harten Übergänge durch die Interpolation erzeugt. Dieses Vorgehen funktionierte aber nicht ohne Weiteres, da der Gauss-Filter von OpenCV den, von LIBELAS, als nicht klassifizierten Bereich mit in die Berechnung einbezog. Deshalb wurde die Idee wieder verworfen und auf die Interpolation der Lücken komplett verzichtet.
 
-Wir entschlossen uns eine e-mail an den Support zu schreiben, um nachzufragen wo genau unser Problem lag.
+Wir entschlossen uns eine Email an den Support zu schreiben, um nachzufragen, wo genau unser Problem lag.
 Zwischenzeitlich hatten wir auch die Vermutung, dass unsere generierte Karte in einem falschen Koordinatensystem lag und es deshalb zu der mittelmäßigen Bewertung kam.
 Wie sich dann durch die Antwort des Supports herausstellte, waren jedoch weder die dicken Wände, noch das Koordinatensystem unser Problem. Das Bewertungssystem wertete auch als unbekannt klassifizierte Voxel, die frei sein sollten, als falsch-belegt. Unser Problem war, dass wir zu viele Unbekannte in der Nähe der Decke und den Wände hatten (siehe Abbildung 3).
 
@@ -196,25 +192,25 @@ Task & Bewertungsintervall & Punkte\\
 \label{table:scoringt2}
 \end{table}
 
-Die Idee war, den Freiraum immer dann zu expandieren, wenn ein als frei klassifizierter Voxel einen Nachbarn hatte, der unbekannt war. Aufgrund der Speicherung der Karte in einem Octree, sind Voxel, die unbekannt sind, nicht explizit in der Datenstruktur gespeichert. Die Expansion des Freiraums führte schließlich zu einer deutlichen Verbesserung in der Bewertung. Durch verschiedene Testläufe fanden wir heraus, dass die 4-malige Expansion des Freiraums zu dem besten Ergebnis führten. Noch besser wurde es wenn die fertige Karte vor der Expansion des Freiraums, noch mit einem leicht angepassten Belegungs-Schwellwert (von 0.7 auf 0.75) ausgedünnt wurde (siehe Abbildung 4). 
+Die Idee war, den Freiraum immer dann zu expandieren, wenn ein als frei klassifizierter Voxel einen Nachbarn hatte, der unbekannt war. Aufgrund der Speicherung der Karte in einem Octree, sind Voxel, die unbekannt sind, nicht explizit in der Datenstruktur gespeichert. Die Expansion des Freiraums führte schließlich zu einer deutlichen Verbesserung in der Bewertung. Durch verschiedene Testläufe fanden wir heraus, dass die 4-malige Expansion des Freiraums zu dem besten Ergebnis führten. Noch besser wurde es, wenn die fertige Karte vor der Expansion des Freiraums noch mit einem leicht angepassten Belegungs--Schwellwert (von 0.7 auf 0.75) ausgedünnt wurde (siehe Abbildung 4). 
 
 \begin{figure}[h!]
 	\centering
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./maps/beforePrune.png}
-		\caption{before pruning}
+		\caption{von octomap generierte Karte}
 	\end{subfigure}
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./maps/beforeMorph.png}
-		\caption{after pruning}
+		\caption{nach dem Ausdünnen}
 	\end{subfigure}\\
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./maps/beforeMorph_free.png}
-		\caption{before morphing with free space}
+		\caption{nach der Ausdünnung mit angezeigtem Freiraum}
 	\end{subfigure}
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./maps/afterMorph_free.png}
-		\caption{after morphing with free space}
+		\caption{nach der Expansion des Freiraums}
 	\end{subfigure}
  \caption{Pipeline}
 \end{figure}
@@ -222,20 +218,16 @@ Die Idee war, den Freiraum immer dann zu expandieren, wenn ein als frei klassifi
 \begin{figure}[h!]
  \centering
  \includegraphics[width=0.5\textwidth]{./Screens/evaltask2.png}
- \caption{Resultat}
+ \caption{Online Evaluation des besten Ergebnisses}
 \end{figure}
 
 \FloatBarrier
-
+\clearpage
 \section{Zusammenfassung}
 
--> Verbesserungsvorschläge:
-Laufzeit ( aus ROS Overload verzichten)
-IMU Informationen einrechnen
-
-Es sind jedoch nach wie vor einige falsch-belegete Voxel übrig und als nächster Schritt wäre es möglich, belegete Voxel die weniger als 4 Nachbarn haben die belegt sind als frei zu klassifizieren.
-
-\begin{table}
+\subsection{Ergebnisse}
+\FloatBarrier
+\begin{table}[h!]
 \colorlet{tablerowcolor}{green!10.0} 
 \centering
 \begin{tabular}{c|c|c}
@@ -253,8 +245,7 @@ Task 2.1 & Task 2.2 & Task 2.3\\
 \label{table:finalscore1}
 \end{table}
 
-
-\begin{table}
+\begin{table}[h!]
 \colorlet{tablerowcolor}{green!10.0} 
 \centering
 \begin{tabular}{c|c|c|c}
@@ -272,6 +263,21 @@ Total & 37.5 & 52 & 72.12\%\\
 \end{table}
 
 \FloatBarrier
+
+\subsection{Verbesserungsvorschläge}
+
+Task 1:
+\begin{itemize}
+	\item{Laufzeit: auf ROS Overload verzichten}
+	\item{Akuratesse: IMU Informationen einrechnen}
+\end{itemize}
+
+Task 2:
+\begin{itemize}
+	\item{Laufzeit: auf ROS Overload verzichten}
+	\item{Akuratesse: belegte Voxel auf frei setzen wenn sie wenige belegte Nachbarn haben}
+\end{itemize}
+
 
 \bibliography{lit.bib}
 \bibliographystyle{alpha}
