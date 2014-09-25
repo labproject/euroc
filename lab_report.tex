@@ -7,6 +7,7 @@
  \usepackage{multirow}
  \usepackage{caption}
  \usepackage{subcaption}
+ \usepackage{amsmath}
 
 \begin{document}
 
@@ -112,41 +113,43 @@ Task & Bewertungsintervall & Punkte\\
 \label{table:scoringt1}
 \end{table}
 				
-\subsection{Task 2 - Mapping}
-In der zweiten Teilaufgabe, der dritten Challenge, sollte eine 3D-Karte mit Hilfe des Octomap-Frameworks von Hornung et al. aus Stereobildpaaren und einer jeweils zugehörigen 6D-Pose erstellt werden. Die generierte Karte konnte online überprüft werden. Bewertet wurde anhand des Matthew-Correlation-Coefficient und der Laufzeit. Der Matthew-Correlation-Coefficient nutz das Verhätnis zwischen den als false-free, false-occupied, true-free und true-occupied klassifizierten Voxeln.
-Um dieses Problem zu lösen haben wir uns für das elas-Framework von Geiger entschieden um dichte Punktwolken zu generieren.
-Die Installation von elas erwies sich aufwendiger als angenommen, da es ROS-Hydro und catkin noch nicht direkt unterstützt. Damit elas unsere Stereobilder gut verarbeiten konnte, mussten diese zunächst noch rektifiziert werden. Mit Hilfe von OpenCV und der gegebenen Kamerakalibrierung die wir schon im ersten Teil in ein OpenCV-konformes Format umgewandelt hatten, war dieser Schritt schnell getan. Was noch fehlte war eine Spezifizierung der Transformationskette vom map-Frame in den Kamera-Frame. Nach Betrachtung der Posen-Nachricht die wir vom Server geliefert bekamen, wussten wir, dass die Pose im IMU-Frame war. Zusätzlich zu den rektifizierten Bildern und der Pose musste nun also auch noch ein Transformation von map auf IMU verfügbar gemacht werden. Die statische Transformation von der IMU zu der Kamera war auch schon aus dem ersten Teil bekannt. Da nun alle Anforderungen der beiden benutzen Frameworks erfüllt waren, konnte die erste Karte erstellt werden. Diese sah auch schon ganz gut aus und stimmte größtenteils mit der von uns handgezeichneten Karte überein. Leider gab es nur wenig Punkte für die Karte. Zwei Punkte für die Akkuratesse und nur Null für die Laufzeit. Um die Laufzeit zu verbessern, beschlossen wir einige Frames zu überspringen. Zunächst war es aber wichtiger die Genauigkeit der Karte zu steigern. Die generierte Voxel-Karte hatte relativ dicke Wände und wir waren uns unsicher inwiefern dies mit in die Bewertung aufgenommen wurde. Als erstes sollten die Wände also dünner werden. Bei Betrachtung der Punktwolke fiel auf, dass an den Rändern dieser keilförmige Falschmessungen in den umliegenden Raum gingen. Um dieses Problem anzugehen bestand ein erster Lösungsansatz einen Filter zu implementieren der auf dem Disparitätsbild ein einem Box-Kernel nach den Minimum und dem Maximum zu suchen und falls die Differenz der beiden über einem Schwellwert lag, den ganzen betrachteten Ausschnitt zu verwerfen. Im Falle von elas auf -10 zu setzen. Leider führte dies nicht zur Eleminierung der Falschmessungen. Siehe Abbildung 2.
+\subsection{Task 2 - Kartierung}
+In der zweiten Teilaufgabe, der dritten Challenge, sollte eine 3D-Karte mit Hilfe des octomap-Frameworks von Hornung \cite{hornung13auro} aus Stereobildpaaren und einer jeweils zugehörigen 6D-Pose erstellt werden. Die generierte Karte konnte online überprüft werden. Bewertet wurde anhand des Matthew-Correlation-Coefficient und der Laufzeit (Siehe Tabelle 2). Der Matthew-Correlation-Coefficient nutz das Verhätnis zwischen den als falsch-frei, falsch-belegt, echt-frei und echt-belegt klassifizierten Voxeln.\\
+$MCC = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$\\
+Wir wollten dem octomap-Framework dichte Punktwolken als Eingabe übergeben, deshlab entschieden wir uns für LIBELAS von Geiger \cite{Geiger2010ACCV}. Die Installation von LIBELAS erwies sich aufwendiger als angenommen, da es ROS-Hydro und catkin noch nicht direkt unterstützt. Damit LIBELAS unsere Stereobilder gut verarbeiten konnte, mussten diese zunächst noch rektifiziert werden. Mit Hilfe von OpenCV und der gegebenen Kameakalibrierung, die wir schon im ersten Teil in ein OpenCV-konformes Format umgewandelt hatten, war dieser Schritt schnell getan. Was noch fehlte war eine Spezifizierung der Transformationskette vom map-Koordinatensystem in das Kamera-Koordinatensystem. Die Betrachtung der Posen-Nachricht, die der Server bereitstellte, führte zu dem Schluss, dass die Pose im IMU-Koordinaten war. Zusätzlich zu den rektifizierten Bildern und der Pose musste nun also auch noch ein Transformation vom map-Koordinatensystem in das IMU-Koordiantensystem verfügbar gemacht werden. Die statische Transformation von dem IMU-System in das Kamera-System war schon aus der ersten Teilaufgabe von Track 1 bekannt. Da nun alle Anforderungen der beiden benutzen Frameworks erfüllt waren, konnte die erste Karte erstellt werden. Diese sah auch schon recht gut aus und stimmte größtenteils mit der von uns handgezeichneten Karte überein. Leider gab es nur wenig Punkte für die Karte. Zwei Punkte für die Akkuratesse und Null für die Laufzeit. Durch das Überspringen einiger Bilder, konnte die Laufzeit einfach reduziert werden. Das Problem bei der Akkuratesse war, das wir viele falsch-belegte Zellen hatten (ca. 27000). Dies führte zu einem Ungleichgewicht im Korrelations-Koeffizienten. 
+
+Zunächst war es jedoch wichtiger, die Genauigkeit der Karte zu verbessern. Die generierte Voxel-Karte hatte relativ dicke Wände und wir waren uns unsicher, inwiefern dies mit in die Bewertung genommen wurde. Als erstes sollten die Wände dünner werden. Bei Betrachtung der Punktwolke fiel auf, dass an den Rändern keilförmige Falschmessungen in den umliegenden Raum ragten. Ein erster Lösungsansatz bestand darin, einen Filter zu implementieren, der über das Disparitätsbild mit einem Box-Kernel lief und, im jeweils betrachten Ausschnitt, nach dem Minimum und dem Maximum suchte. Falls die Differenz der Beiden über einem anpassbaren Schwellwert lag, wurde der Ausschnitt verwofen. Im Falle von LIBELAS beduete dies, den Ausschnitt auf -10 zu setzen. Leider führte dieses Vorgehen nicht zur Eleminierung der Falschmessungen (siehe Abbildung 2).
 
 \begin{figure}[h!]
 	\centering
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./jumpEdge/camera.png}
-		\caption{after morphing with free space}
+		\caption{Szene}
 	\end{subfigure}\\
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./jumpEdge/je_off_disparity.png}
-		\caption{min-max off}
+		\caption{min-max aus}
 	\end{subfigure}
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./jumpEdge/je_on_disparity.png}
-		\caption{min-max on}
+		\caption{min-max an}
 	\end{subfigure}
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./jumpEdge/je_off_pointcloud.png}
-		\caption{min-max off}
+		\caption{min-max aus}
 	\end{subfigure}
 	\begin{subfigure}[h]{0.45\textwidth}
 		\includegraphics[width=\textwidth]{./jumpEdge/je_on_pointcloud.png}
-		\caption{min-max on}
+		\caption{min-max an}
 	\end{subfigure}	
  \caption{Pipeline}
 \end{figure}
 
-Eine weitere Idee um die Wände auszudünnen und Falschmessungen zu eliminieren, war die generierte Octomap zu prunen nachdem der Occcupancy-Threshold erhöht wurde. Dies führte dann auch zu einer sichtabaren Veränderung in der Map. Die Wände wurden etwas dünner und occupied-Space wurde an manchen Stellen zu unkown- oder free-Space. Auf die finale Bewertung der Map hatte dies jedoch nur minimale Auswirkungen. Auch Parameteranpassungen in elas vorallem die Gap-Interpolation hatten wenig sichtbare Auswirkungen auf das Resultat. Die Gap-Interpolation führte dazu, dass es im Disparitätsbild sehr harte Übergänge in den interpolierten Bereichen auftraten. Um dies zu verhindern filterten wir das Original-Disparitätsbild mit einem Gauss-Filter um glatte Ränder um die Lücken zu bekommen. Dannach interpolierten wir und kopierten die so weich interpolierten Lücken zurück in das Original-Disparitätsbild, um die interessanten Feautures zu behalten aber keine komischen Effekte durch die Gap-Interpolation zu bekommen. Dieser Filter führte nur zu einer minimalen Verbesserung und wurde deswegen wieder verworfen.
+Eine weitere Idee, um die Wände zu verdünnen und Falschmessungen zu eliminieren, war die generierte Karte auszudünnen (Pruning), nachdem der Schwellwert für die Belegung (occcupancy-threshold) erhöht wurde. Dies führte dann auch zu einer sichtbaren Veränderung in der Karte. Die Wände wurden etwas dünner und einige, ehemals als belegt klassifizierte, Voxel wurden zu unbekannt oder frei. Auf die finale Bewertung der Karte, hatte das aber nur minimale Auswirkungen. Auch Parameteranpassungen in LIBELAS, vorallem des Parameters, der die Interplation über die Lücken im Disparitätsbild bestimmte, hatten wenig sichtbare Auswirkungen auf das Resultat. Die Interpolation führte dazu, dass im Disparitätsbild sehr harte Übergänge in den interpolierten Bereichen auftraten. Um dies zu verhindern filterten wir das Original-Disparitätsbild mit einem Gauss-Filter, um glatte Ränder rundum die Lücken zu bekommen. Dannach ließen wir LIEBELAS interpolieren und kopierten, die weich interpolierten Lücken zurück in das Original-Disparitätsbild. So blieben die interessanten Merkmale erhalten und es wurden keine harten Übergänge durch die Interpolation erzeugt. Dieses Vorgehen funktionierte aber nicht so ohne Weiteres, da der Gauss-Filter von OpenCV den, von LIBELAS als nicht klassifizierten, Bereich mit in die Berechnung einbezog. Deshalb wurde die Idee wieder verworfen. Wir beschlossen ganz auf die Interpolation über die Lücken zu verzichten.
 
-Um nun voran zu kommen entschlossen wir uns eine e-mail an den Support zu schreiben um nachzufragen wo genau unser Problem lag.
-Zwischenzeitlich hatten wir auch die Vermutung, dass unsere generierte Karte im falschen Koordinatensystem lag und es deshalb zu der mittelmäßigen Bewertung kam.
-Wie sich dann durch die e-mail herausstellte waren jedoch weder die dicken Wände noch das Koordinatensystem unser Hauptproblem. Das Bewertungssystem wertete auch unkown-Space der free sein sollte also false-occupied. Unser Problem war, dass wir zu viel unknown-Space in der Nähe der Decke und den Wände hatten. Siehe Abbildung 3.
+Wir entschlossen uns eine e-mail an den Support zu schreiben, um nachzufragen wo genau unser Problem lag.
+Zwischenzeitlich hatten wir auch die Vermutung, dass unsere generierte Karte in einem falschen Koordinatensystem lag und es deshalb zu der mittelmäßigen Bewertung kam.
+Wie sich dann durch die Antwort des Supports herausstellte, waren jedoch weder die dicken Wände, noch das Koordinatensystem unser Problem. Das Bewertungssystem wertete auch als unbekannt klassifizierte Voxel, die frei sein sollten, als falsch-belegt. Unser Problem war, dass wir zu viele Unbekannte in der Nähe der Decke und den Wände hatten (siehe Abbildung 3).
 
 \begin{table}
 \colorlet{tablerowcolor}{green!10.0} 
@@ -172,7 +175,7 @@ Task & Bewertungsintervall & Punkte\\
 \label{table:scoringt2}
 \end{table}
 
-Nun musste also der Freespace immer dann expandiert werden, wenn ein als free klassifizierter Voxel einen Nachbarn hatte, der als unknown klassifiziert war. Aufgrund der Speicherung der Karte in einem Octree sind Voxel die unknown sind nicht explizit in der Datenstruktur gespeichert. Die Expansion des Free-Space führte schließlich auch zu einer deutlichen Verbesserung in der Bewertung. Durch verschiedene Testläufe fanden wir heraus, dass die 4-malige Expansion des Free-Space zu dem besten Ergebnis führten. Noch besser wurde es wenn die fertige Karte davor noch mit einem leicht angepassten Occupancy-Threshold (von 0.7 auf 0.75) geprunt wurde. Siehe Abbildung 4. Es sind jedoch nach wie vor einige fals-occupied übrig und als nächster Schritt wäre es möglich occupied Voxel die weniger als 4 Nachbarn haben die occupied sind auf free zu setzen.
+Die Idee war, den Freiraum immer dann zu expandieren, wenn ein als frei klassifizierter Voxel einen Nachbarn hatte, der unbekannt war. Aufgrund der Speicherung der Karte in einem Octree, sind Voxel, die unbekannt sind, nicht explizit in der Datenstruktur gespeichert. Die Expansion des Freiraums führte schließlich zu einer deutlichen Verbesserung in der Bewertung. Durch verschiedene Testläufe fanden wir heraus, dass die 4-malige Expansion des Freiraums zu dem besten Ergebnis führten. Noch besser wurde es wenn die fertige Karte vor der Expansion des Freiraums, noch mit einem leicht angepassten Belegungs-Schwellwert (von 0.7 auf 0.75) ausgedünnt wurde (siehe Abbildung 4). 
 
 \begin{figure}[h!]
 	\centering
@@ -200,6 +203,8 @@ Nun musste also der Freespace immer dann expandiert werden, wenn ein als free kl
  \includegraphics[width=0.5\textwidth]{./Screens/evaltask2.png}
  \caption{Resultat}
 \end{figure}
+
+Es sind jedoch nach wie vor einige falsch-belegete Voxel übrig und als nächster Schritt wäre es möglich, belegete Voxel die weniger als 4 Nachbarn haben die belegt sind als frei zu klassifizieren.
 
 \section{Zusammenfassung}
   \bibliography{lit.bib}
