@@ -8,10 +8,13 @@
  \usepackage{caption}
  \usepackage{subcaption}
  \usepackage{amsmath}
+ \usepackage{placeins} 
+ \setlength{\parindent}{0in} 
 
 \begin{document}
 
-\title{Report\\Projektgruppe Kognitive Robotik}
+\title{Report\vspace{1cm}\\\textbf{Projektgruppe Kognitive Robotik}\vspace{5cm}}
+
 
 \author{Münstermann,  Cedrick\\  Krombach, Nicola\\[1cm]
 	Autonomous Intelligent Systems\\ \textsc{Universität Bonn}\\}
@@ -21,65 +24,67 @@
 \maketitle
 
 
-\section*{Abstract}
-
 
 \section{Einleitung}
 
-Im Rahmen der Projektgruppe Kognitive Robotik sollten in diesem Jahr die Aufgaben der European Robotics Challenges\footnote{http://www.euroc-project.eu/} bearbeitet werden. 
+Im Rahmen der Projektgruppe Kognitive Robotik sollten in diesem Jahr die Aufgaben der European Robotics Challenges\footnote{http://www.euroc-project.eu/} bearbeitet werden.
+Ziel dieser Challenge ist es, die Entwicklung von Lösungen für noch ungelöste Probleme in der Robotik anzutreiben.
+In Form eines Wettbewerbs soll das Bewusstsein auf die Notwendigkeit der Entwicklung von Algorithmen für diese Probleme gelenkt, und Teams aus dem 
+akademischen und industriellen Bereich ermuntert werden, sich zu beteiligen.
 Die Aufgaben der European Robotics Challenges unterteilen sich dabei in drei Challenges, die wiederum verschiedene Unteraufgaben haben:
 
 \begin{itemize}
- \item Challenge 1: Stationäre Manipulationsroboter in Kooperation mit Menschen (Track 1 \& 2)
- \item Challenge 2: Mobile Manipulationsroboter für die Logistik (Track 1 \& 2)
- \item Challenge 3: Flugroboter für industrielle Inspektion (Track 1 \& 2)
+ \item Challenge 1: Stationäre Manipulationsroboter in Kooperation mit Menschen \mbox{(Track 1 \& 2)}
+ \item Challenge 2: Mobile Manipulationsroboter für die Logistik \mbox{(Track 1 \& 2)}
+ \item Challenge 3: Flugroboter für industrielle Inspektion \mbox{(Track 1 \& 2)}
 \end{itemize}
 
-blabla mehr zu euroc? \\
+Unsere Gruppe befasste sich mit dem ersten Track der dritten Challenge, bei welchem die Lokalisierung eines Flugroboters (\textit{engl. Micro Aerial Vehicle, MAV}) und die 3D-Rekonstruktion 
+der Umgebung im Vordergrund stand.
+Für die Umgebungserkennung ist der in der Challenge eingesetzte Flugroboter mit einem Inertialsensor (\textit{engl. inertial measurement unit, IMU}) in Verbindung mit einem Stereokamerasystem ausgestattet. 
+
+
 Autonome Flugroboter eignen sich aufgrund ihres flexiblen Aufbaus und der Möglichkeit schwer zugängliche Objekte anzufliegen, besonders für die Inspektion und Überwachung von sehr großen industriellen
 Anlagen oder Infrastrukturen. Dabei sollen sie autonom agieren, sodass auf die Abhängigkeit von einem Piloten verzichtet werden kann.
 Auch für die Inspektion von gefährlichen Umgebungen eignet sich ein autonomer Flugroboter.
+Im folgenden werden die Aufgaben und entsprechenden Lösungsansätze von Track 1 vorgestellt.
 
-Unsere Gruppe befasste sich mit dem ersten Track der dritten Challenge, bei welchem die Lokalisierung des MAV und die 3D-Rekonstruktion der Umgebung mit Hilfe von Stereo-Bildern
-im Vordergrund stand.
+
 
 
 
 \section{Aufgabenstellung} 
-In dem ersten Track von Challenge 3 geht es vorrangig um die Verarbeitung von visuellen Informationen, um die Pose des MAV zu schätzen und schließlich eine Karte von der Umgebung aufzubauen.
+Der erste Track von Challenge 3 befasst sich vorrangig mit der Verarbeitung von visuellen Informationen und Geschwindigkeiten, welche die IMU liefert, um die Pose des MAV zu schätzen
+und schließlich eine Karte von der Umgebung aufzubauen. Beide Aufgaben, Lokalisierung und Kartierung, lassen sich unabhängig voneinander lösen.
 
 
 
 \subsection{Task 1 - Visuelle Lokalisierung}
 In der ersten Aufgabe ging es darum aus Stereobildern eine 6D-Pose zu schätzen. Dazu wurden realistische Datensätze mit unterschiedlichen Schwierigkeiten zur Verfügung gestellt.
-Ausschließlich anhand von diesen Datensätzen sollte nun die Lokalisierung erfolgen. Für die Evaluation war sowohl die lokale Genauigkeit als auch die Echtzeitfähigkeit der Berechnung entscheidend.
-Eine \"Ubersicht der Evaluierungskriterien und Punktevergabe findet sich in \cite{eurocannex}.
-Neben den Kamerabildern wurden zudem entsprechende Kalibrierungen des Kamerasystems und der IMU zur Verfügung gestellt. 
-Für die Berechnung der visuellen Odometrie wurden zunächst zwei bereits in ROS verfügbare Verfahren getestet:\\
-Das Paket Semi-direct Monocular Visual Odometry (SVO)\cite{EPFL-CONF-199740} und das Paket LIBVISO2 \cite{Geiger11}.
-In ersten Experimenten stellte sich das LIBVISO2 als besser geeignet heraus, und zudem erlaubt es die Verwendung von Stereokameras für die visuelle Odometrie, 
+Ausschließlich anhand dieser Datensätze sollte nun die Lokalisierung erfolgen. Für die Evaluation war sowohl die lokale Genauigkeit als auch die Echtzeitfähigkeit der Berechnung entscheidend.
+Eine Übersicht der Evaluierungskriterien und Punkteverteilung findet sich im bereitgestellten technischem Annex\cite{eurocannex}.
+Neben den Kamerabildern wurden zudem eine Kalibrierung des Stereokamerasystems und der IMU zur Verfügung gestellt. 
+Für die Berechnung der visuellen Odometrie wurden zunächst zwei bereits in ROS verfügbare Verfahren installiert und getestet:\\
+Das Paket Semi-direct Monocular Visual Odometry (SVO)\cite{EPFL-CONF-199740} und das Paket \mbox{LIBVISO2}-Paket \cite{Geiger11}.
+In ersten Experimenten stellte sich das \mbox{LIBVISO2} für unsere Zwecke als besser geeignet heraus, und zudem erlaubt es die Verwendung von Stereokameras für die visuelle Odometrie, 
 im Gegensatz zu SVO, welches ein monokulares Verfahren ist.
-Als Kamerakalibrierung wurde die bereitgestellte Kalibrierung mittels Aprilboard verwendet.
-Da die Darstellung der Pose in IMU-Koordinaten erfolgen muss, rechnen wir die Pose mittels einer statischen Transformation aus der Kalibrierung von Kamerakoordinaten in IMU-Koordinaten um.
+Als Kamerakalibrierung wurde die bereitgestellte Kalibrierung mittels Aprilboard verwendet. Da diese jedoch nicht in dem von \mbox{LIBVISO2} verwendeten OpenCV-Format war, wandelten wir es mit Hilfe von OpenCV
+in ein konformes Format um.
+Für die korrekte Darstellung der Pose in IMU-Koordinaten, rechneten wir die aus den Stereobildern gewonnene Pose, mittels einer statischen Transformation aus der Kalibrierung, von Kamerakoordinaten 
+in IMU-Koordinaten um.
 Die sich dadurch ergebende Transformationskette lautet:\\
 
 $  map \rightarrow imu \rightarrow cam0 $\\
 
-Da keine Groundtruth zur Verfügung gestellt wird, konnte man letztlich nur über die Online-Evaluation herausfinden, wie genau die berechnete Pose ist und wie hoch der relative Fehler ist.
-Mit den Default-Werten von LIBVISO2 erhielten wir zu Beginn 4 Punkte bei der einfachsten Schwierigkeit. 
-Davon 3 Punkte in der Genauigkeit mit einem mittleren relativen Translationsfehler von 2.6\% und 1 Punkt in der Laufzeit mit 105ms.
-Die Laufzeit konnten wir mit dem Setzen des Compiler-Flags DCMAKE\_BUILD\_TYPE auf Release auf 39ms reduzieren, und erhielten so 3 Punkte in der Laufzeit.
-Für die Erhöhung der Genauigkeit passten wir die Parameter von LIBVISO2 an die unterschiedlichen Schwierigkeiten an. 
-So erhöhten wir den Parameter match\_radius von 100 auf 200 und die RANSAC-Iterationen von 150 auf 160.
-Damit konnten wir den Fehler von 2.6\% auf 1.0\% reduzieren, und erhalten damit volle Punktzahl in der Genauigkeit.
-Ein Beispiel einer solchen Evaluation ist in Abbildung~\ref{fig:evat1} zu sehen. Dort schneiden wir in der Genauigkeit sehr gut ab, mit einem gemittelten relativen Translationsfehler 
-von 1\% erhalten wir für die Genauigkeit volle Punktzahl. Auch in der Laufzeit sind wir mit 40ms verhältnismäßig gut. Für die volle Punktzahl benötigt man eine Laufzeit kleiner 20ms.
-Auch in der zweiten Schwierigkeitsstufe erhalten wir mit 8 von 10 möglichen Punkten ein gutes Ergebnis für die berechnete Odometrie. In der schwierigsten Stufe hat die visuelle Odometrie
-jedoch einige Probleme die korrekte Pose zu schätzen, was durch die schlechteren Belichtungsverhältnisse und merkmalsärmere Umgebung zu erlären ist.
-Wie in Abbildung~\ref{fig:evat3} zu sehen, driften wir vor allem in x- und y-Richtung stark.
-
-
-\begin{figure}[h!]
+\begin{figure}[t]
+ \centering
+  \begin{subfigure}[b]{0.49\textwidth}
+ \includegraphics[width=\textwidth]{./Screens/t1_opt2_april.png}\caption{Task 1.1}\label{fig:evat1}  \end{subfigure}
+  \begin{subfigure}[b]{0.49\textwidth}
+ \includegraphics[width=\textwidth]{./Screens/t1_3.png}\caption{Task 1.3}\label{fig:evat3}
+ \end{subfigure}
+ \caption{Ergebnis der Online-Evaluation zu Task 1.1 und 1.3 mit 7 von 8 (bzw 5 von 8) möglichen Punkten} \label{fig:eva} 
+\end{figure}\begin{figure}[h!]
  \centering
   \begin{subfigure}[b]{0.49\textwidth}
  \includegraphics[width=\textwidth]{./Screens/t1_opt2_april.png}\caption{Task 1.1}\label{fig:evat1}  \end{subfigure}
@@ -88,6 +93,20 @@ Wie in Abbildung~\ref{fig:evat3} zu sehen, driften wir vor allem in x- und y-Ric
  \end{subfigure}
  \caption{Ergebnis der Online-Evaluation zu Task 1.1 und 1.3 mit 7 von 8 (bzw 5 von 8) möglichen Punkten} \label{fig:eva} 
 \end{figure}
+
+Da keine Groundtruth zur Verfügung gestellt wurde, konnte man letztlich nur über die Online-Evaluation herausfinden, wie genau die berechnete Pose ist und wie hoch der relative Fehler ist.
+Mit den Default-Werten von \mbox{LIBVISO2} erhielten wir zu Beginn 4 Punkte bei der einfachsten Schwierigkeit. 
+Davon 3 Punkte in der Genauigkeit mit einem mittleren relativen Translationsfehler von 2.6\% und 1 Punkt in der Laufzeit mit 105ms.
+Die Laufzeit konnten wir mit dem Setzen des Compiler-Flags \textit{DCMAKE\_BUILD\_TYPE} auf \textit{Release} auf 39ms reduzieren, und erhielten so 3 Punkte in der Laufzeit.
+Für die Erhöhung der Genauigkeit passten wir die Parameter von \mbox{LIBVISO2} an die unterschiedlichen Schwierigkeiten an. 
+So erhöhten wir den Parameter match\_radius von 100 auf 200 und die RANSAC-Iterationen von 150 auf 160.
+Damit konnten wir den Fehler von 2.6\% auf 1.0\% reduzieren, und erhalten damit volle Punktzahl in der Genauigkeit.
+Ein Beispiel einer solchen Evaluation ist in Abbildung~\ref{fig:evat1} zu sehen. Dort schneiden wir in der Genauigkeit sehr gut ab, mit einem gemittelten relativen Translationsfehler 
+von 1\% erhalten wir für die Genauigkeit volle Punktzahl. Auch in der Laufzeit sind wir mit 40ms verhältnismäßig gut. Für die volle Punktzahl benötigt man eine Laufzeit kleiner 20ms.
+Auch in der zweiten Schwierigkeitsstufe erhalten wir mit 8 von 10 möglichen Punkten ein gutes Ergebnis für die berechnete Odometrie. In der schwierigsten Stufe hat die visuelle Odometrie
+jedoch einige Probleme die korrekte Pose zu schätzen, was durch die schlechteren Belichtungsverhältnisse und merkmalsärmere Umgebung zu erlären ist.
+Wie in Abbildung~\ref{fig:evat3} zu sehen, driften wir vor allem in x- und y-Richtung stark.
+
 
 \begin{table}
 \colorlet{tablerowcolor}{green!10.0} 
@@ -112,7 +131,9 @@ Task & Bewertungsintervall & Punkte\\
 \caption{Bewertungssystem von EuRoC für Challenge 3 Task 1.1, grün hervorgehoben sind die erziehlten Ergebnisse}
 \label{table:scoringt1}
 \end{table}
-				
+
+\FloatBarrier
+			
 \subsection{Task 2 - Kartierung}
 In der zweiten Teilaufgabe, der dritten Challenge, sollte eine 3D-Karte mit Hilfe des octomap-Frameworks von Hornung \cite{hornung13auro} aus Stereobildpaaren und einer jeweils zugehörigen 6D-Pose erstellt werden. Die generierte Karte konnte online überprüft werden. Bewertet wurde anhand des Matthew-Correlation-Coefficient und der Laufzeit (Siehe Tabelle 2). Der Matthew-Correlation-Coefficient nutz das Verhätnis zwischen den als falsch-frei, falsch-belegt, echt-frei und echt-belegt klassifizierten Voxeln.\\
 $MCC = \frac{TP \times TN - FP \times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$\\
@@ -204,9 +225,55 @@ Die Idee war, den Freiraum immer dann zu expandieren, wenn ein als frei klassifi
  \caption{Resultat}
 \end{figure}
 
-Es sind jedoch nach wie vor einige falsch-belegete Voxel übrig und als nächster Schritt wäre es möglich, belegete Voxel die weniger als 4 Nachbarn haben die belegt sind als frei zu klassifizieren.
+\FloatBarrier
 
 \section{Zusammenfassung}
-  \bibliography{lit.bib}
-  \bibliographystyle{alpha}
+
+-> Verbesserungsvorschläge:
+Laufzeit ( aus ROS Overload verzichten)
+IMU Informationen einrechnen
+
+Es sind jedoch nach wie vor einige falsch-belegete Voxel übrig und als nächster Schritt wäre es möglich, belegete Voxel die weniger als 4 Nachbarn haben die belegt sind als frei zu klassifizieren.
+
+\begin{table}
+\colorlet{tablerowcolor}{green!10.0} 
+\centering
+\begin{tabular}{c|c|c}
+\multicolumn{3}{c}{Visuelle Lokalisierung}\vspace{2mm}\\
+Task 1.1 & Task 1.2 & Task 1.3\\
+\hline\vspace{2mm}
+7/8 & 8/10 & 6/8\\
+\multicolumn{3}{c}{ }\\
+\multicolumn{3}{c}{3D-Kartierung}\vspace{2mm}\\
+Task 2.1 & Task 2.2 & Task 2.3\\
+\hline\vspace{2mm}
+5/8 & 6.5/10 & 5/8\\
+\end{tabular}
+\caption{Erziehlte Ergebnisse und maximale Punktzahl für Track 1}
+\label{table:finalscore1}
+\end{table}
+
+
+\begin{table}
+\colorlet{tablerowcolor}{green!10.0} 
+\centering
+\begin{tabular}{c|c|c|c}
+Aufgabe & erziehlte Punkte & maximale Punkte & ???\\
+\hline
+Task 1 & 21 & 26 & 80.77\% \\
+Task 2 & 16.5 & 26 & 63.46\% \\
+\hline
+\hline
+ & & \\
+Total & 37.5 & 52 & 72.12\%\\
+\end{tabular}
+\caption{Übersicht der erreichten Punkte}
+\label{table:finalscore2}
+\end{table}
+
+\FloatBarrier
+
+\bibliography{lit.bib}
+\bibliographystyle{alpha}
+
 \end{document}
